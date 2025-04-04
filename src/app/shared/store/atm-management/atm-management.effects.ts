@@ -33,36 +33,56 @@ export class AtmManagementEffects {
 
   createAtmEffects$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(AtmManagementActions.loadAtms),
+      ofType(AtmManagementActions.createAtm),
       switchMap((action) =>
-        this.atmManagementService
-          .getAtms(action.search, action.limit, action.page)
-          .pipe(
-            map((atms: ATMManagement[]) =>
-              AtmManagementActions.loadAtmsSuccess({ atms })
-            ),
-            catchError((error) =>
-              of(AtmManagementActions.loadAtmsFailure({ error }))
-            )
+        this.atmManagementService.createAtm(action.body).pipe(
+          map(() => AtmManagementActions.createAtmSuccess()),
+          catchError((error) =>
+            of(AtmManagementActions.loadAtmsFailure({ error }))
           )
+        )
       )
     )
   );
 
   updateAtmAtmEffects$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(AtmManagementActions.loadAtms),
+      ofType(AtmManagementActions.updateAtm),
       switchMap((action) =>
-        this.atmManagementService
-          .getAtms(action.search, action.limit, action.page)
-          .pipe(
-            map((atms: ATMManagement[]) =>
-              AtmManagementActions.loadAtmsSuccess({ atms })
-            ),
-            catchError((error) =>
-              of(AtmManagementActions.loadAtmsFailure({ error }))
-            )
+        this.atmManagementService.updateAtm(action.id, action.body).pipe(
+          map(() => AtmManagementActions.updateAtmSuccess()),
+          catchError((error) =>
+            of(AtmManagementActions.loadAtmsFailure({ error }))
           )
+        )
+      )
+    )
+  );
+
+  deleteAtmAtmEffects$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AtmManagementActions.deleteAtm),
+      switchMap((action) =>
+        this.atmManagementService.delete(action.id).pipe(
+          map(() => AtmManagementActions.loadAtms({search: ""})),
+          catchError((error) =>
+            of(AtmManagementActions.deleteAtmFailure({ error }))
+          )
+        )
+      )
+    )
+  );
+
+  getAtmByIdEffects$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AtmManagementActions.getATMById),
+      switchMap((action) =>
+        this.atmManagementService.getATMById(action.id).pipe(
+          map((atm) => AtmManagementActions.getAtmSuccess({ atm })),
+          catchError((error) =>
+            of(AtmManagementActions.getAtmFailure({ error }))
+          )
+        )
       )
     )
   );

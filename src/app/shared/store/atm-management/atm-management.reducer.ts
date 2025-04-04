@@ -7,12 +7,18 @@ export interface AtmManagementState {
   atms: ATMManagement[];
   error: any;
   count: number;
+  atm: ATMManagement | null;
+  page: number;
+  limit: number;
 }
 
 const initialState: AtmManagementState = {
   atms: [],
   count: 0,
   error: null,
+  atm: null,
+  limit: 10,
+  page: 1,
 };
 
 export const atmManagementReducer = createReducer(

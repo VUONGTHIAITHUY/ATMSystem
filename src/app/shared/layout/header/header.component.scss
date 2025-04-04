@@ -40,6 +40,9 @@
     flex: 1;
     max-width: 500px;
     margin: 0 20px;
+    display: flex;
+    justify-content: center;  
+    gap: 10px;
 
     .search-box {
       display: flex;

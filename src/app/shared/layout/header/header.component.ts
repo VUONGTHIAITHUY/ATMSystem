@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { AtmManagementActions } from '../../store/atm-management/atm-management.actions';
 import { MatDialog } from '@angular/material/dialog';
 import { DetailAtmComponent } from '../../../pages/detail-atm/detail-atm.component';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-header',
@@ -15,15 +16,25 @@ import { DetailAtmComponent } from '../../../pages/detail-atm/detail-atm.compone
 export class HeaderComponent {
   searchQuery: string = '';
 
-  constructor(private matDialog: MatDialog) {}
+  constructor(private matDialog: MatDialog, private store: Store) {}
 
   onSearch() {
     // Implement search functionality here
-    console.log('Searching for:', this.searchQuery);
+    this.store.dispatch(
+      AtmManagementActions.loadAtms(
+        {
+          search: this.searchQuery
+        }
+      )
+    )
   }
 
   openDialog() {
-    const dialogRef = this.matDialog.open(DetailAtmComponent);
+    const dialogRef = this.matDialog.open(DetailAtmComponent, {
+      data: {
+        mode: "add"
+      }
+    });
     dialogRef.afterClosed().subscribe((result) => {
       console.log(`Dialog result: ${result}`);
     });

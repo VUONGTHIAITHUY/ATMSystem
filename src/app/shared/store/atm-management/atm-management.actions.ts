@@ -6,8 +6,8 @@ export const AtmManagementActions = createActionGroup({
   events: {
     loadAtms: props<{
       search: string;
-      page: number;
-      limit: number;
+      page?: number;
+      limit?: number;
     }>(),
     'Load Atms Success': props<{ atms: ATMManagement[] }>(),
     'Load Atms Failure': props<{ error: any }>(),
@@ -16,12 +16,16 @@ export const AtmManagementActions = createActionGroup({
     'Create Atm Success': emptyProps(),
     'Create Atm Failure': props<{ error: any }>(),
 
-    updateAtm: props<{ body: ATMManagement }>(),
+    updateAtm: props<{ id: number; body: ATMManagement }>(),
     'Update Atm Success': emptyProps(),
     'Update Atm Failure': props<{ error: any }>(),
 
-    deleteAtm: props<{ body: ATMManagement }>(),
+    deleteAtm: props<{ id: number }>(),
     'Delete Atm Success': emptyProps(),
     'Delete Atm Failure': props<{ error: any }>(),
+
+    getATMById: props<{ id: number }>(),
+    'Get Atm Success': props<{ atm: ATMManagement }>(),
+    'Get Atm Failure': props<{ error: any }>(),
   },
 });

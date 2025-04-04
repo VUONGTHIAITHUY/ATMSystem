@@ -19,6 +19,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+import { MatDialog } from '@angular/material/dialog';
+import { DetailAtmComponent } from '../detail-atm/detail-atm.component';
 
 @Component({
   selector: 'app-list-atm',
@@ -47,6 +49,7 @@ export class ListAtmComponent implements OnInit {
     'manufacturer',
     'serialNumber',
     'image',
+    'actions'
   ];
 
   // Pagination properties
@@ -62,7 +65,7 @@ export class ListAtmComponent implements OnInit {
   search: string = '';
   formGroup!: FormGroup;
 
-  constructor(private store: Store, private formBuilder: FormBuilder) {}
+  constructor(private store: Store,private matDialog: MatDialog) {}
 
   ngOnInit(): void {
     this.loadAtm();
@@ -94,17 +97,35 @@ export class ListAtmComponent implements OnInit {
     this.loadAtm();
   }
 
-  view(data: ATMManagement): void {
-    
+  onView(data: ATMManagement): void {
+    const dialogRef = this.matDialog.open(DetailAtmComponent, {
+      data: {
+        mode: "view",
+        id: data.id
+      }
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log(`Dialog result: ${result}`);
+    });
   }
 
-  edit(element: any): void {
-    console.log('Edit clicked', element);
-    // Add your edit logic here
+  onEdit(data: ATMManagement): void {
+    const dialogRef = this.matDialog.open(DetailAtmComponent, {
+      data: {
+        mode: "edit",
+        id: data.id
+      }
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log(`Dialog result: ${result}`);
+    });
   }
 
-  delete(element: any): void {
-    console.log('Delete clicked', element);
-    // Add your delete logic here
+  onDelete(data: ATMManagement): void {
+    this.store.dispatch(
+      AtmManagementActions.deleteAtm({id: data.id})
+    )
   }
+
+
 }
